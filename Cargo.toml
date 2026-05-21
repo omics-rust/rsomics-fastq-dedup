@@ -2,11 +2,11 @@
 name = "rsomics-fastq-dedup"
 version = "0.1.0"
 description = "Sequence-based FASTQ deduplication (kmer-bin or full-sequence hash). Rust port consolidating fastp -D and seqkit rmdup."
-edition.workspace = true
-rust-version.workspace = true
-license.workspace = true
-repository.workspace = true
-authors.workspace = true
+edition = "2024"
+rust-version = "1.91"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/omics-rust/rsomics-world"
+authors = ["Zane Leong <efd@live.com>"]
 categories = ["science", "command-line-utilities"]
 keywords = ["fastq", "deduplication", "bioinformatics", "fastp", "seqkit"]
 
@@ -15,19 +15,17 @@ name = "rsomics-fastq-dedup"
 path = "src/main.rs"
 
 [dependencies]
-rsomics-common = { path = "../../../foundation/rsomics-common", version = "0.6" }
-rsomics-help = { path = "../../../foundation/rsomics-help", version = "0.3" }
-rsomics-kmer = { path = "../../../foundation/rsomics-kmer", version = "0.2" }
-clap = { workspace = true, features = ["derive"] }
-serde = { workspace = true, features = ["derive"] }
-serde_json.workspace = true
-anyhow.workspace = true
+rsomics-common = { version = "0.6" }
+rsomics-help = { version = "0.3" }
+rsomics-kmer = { version = "0.2" }
+clap = { version = "4", features = ["derive"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+anyhow = "1"
 needletail = { version = "0.7", default-features = false, features = ["compression"] }
-flate2.workspace = true
+flate2 = { version = "1", default-features = false, features = ["zlib-rs"] }
 
 [dev-dependencies]
-rsomics-common = { path = "../../../foundation/rsomics-common", version = "0.6", features = ["test-support"] }
+rsomics-common = { version = "0.6", features = ["test-support"] }
 tempfile = "3"
 
-[lints]
-workspace = true
