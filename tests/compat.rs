@@ -41,6 +41,34 @@ fn kept_seqs(fastq: &[u8]) -> Vec<String> {
     seqs
 }
 
+/// Always-run golden: `--mode full` kept sequences must match the
+/// `seqkit rmdup -s` set captured at tests/golden/dup.kept.seqs.
+#[test]
+fn full_dedup_matches_seqkit_golden() {
+    let dir = std::env::temp_dir().join("rsomics-fastq-dedup-golden");
+    let _ = std::fs::create_dir_all(&dir);
+    let ours_out = dir.join("ours.fq");
+
+    assert!(
+        Command::new(ours())
+            .args(["-i"])
+            .arg(fixture())
+            .arg("-o")
+            .arg(&ours_out)
+            .args(["--mode", "full"])
+            .status()
+            .unwrap()
+            .success()
+    );
+
+    let ours_seqs = kept_seqs(&std::fs::read(&ours_out).unwrap());
+    let golden: Vec<String> = include_str!("golden/dup.kept.seqs")
+        .lines()
+        .map(str::to_owned)
+        .collect();
+    assert_eq!(ours_seqs, golden, "kept set diverged from seqkit golden");
+}
+
 // `--mode full` (exact full-sequence dedup) must keep the same sequence set as
 // `seqkit rmdup -s` (compare sorted kept sequences; first-occurrence order is
 // the same but we compare sets to be robust).
